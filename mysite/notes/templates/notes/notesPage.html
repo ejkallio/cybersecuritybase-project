@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Notes</title>
+</head>
+<body>
+    <h1>My notes</h1>
+
+    <form action="{% url 'index' %}" method="POST">
+        <!--FLAW 1  Inadequate  CSRF protection-->
+        <!-- add csrf_token ({csrf_token})-->
+        <label for="header">Header:</label><br>
+        <input type="text" id="header" name="header"><br>
+        
+        <label for="content">Content:</label><br>
+        <textarea id="content" name="content" rows="4" cols="50"></textarea><br>
+        
+        <input type="submit" value="Save Note">
+    </form>
+
+    <h2>Your Notes:</h2>
+    <ul>
+        {% for note in notes %}
+        <!--FLAW 5: Cross-site Scripting-->
+        <!--replace safe with escape-->
+        <!-- <li>{{ entry.1 | escape }} - {{ entry.2 | escape}}</li>-->
+            <li>{{ note.1 | safe }} - {{ note.2 | safe}}</li>
+            <a href="{%url 'edit' note.0%}">Edit</a> |
+            <a href="{%url 'delete' note.0%}">Delete</a>
+        {% empty %}
+            <li>No notes at the moment.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

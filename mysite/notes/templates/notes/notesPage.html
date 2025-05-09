@@ -23,8 +23,12 @@
     <h2>Your Notes:</h2>
     <ul>
         {% for note in notes %}
+			<!-- FLAW 4: cross-site scripting -->
+			<!-- Fix: replaxe with: -->
+			<!-- <h3>{{ note.1 | escape }}</h3> -->	
+			<!-- <p>{{ note.2 | escape }}</p>-->
             <h3>{{ note.1 | safe }}</h3>
-			<p> {{ note.2 | safe}} </p>
+			<p> {{ note.2 | safe }} </p>
             <a href="{%url 'edit' note.0%}">Edit</a> |
             <a href="{%url 'delete' note.0%}">Delete</a>
         {% empty %}

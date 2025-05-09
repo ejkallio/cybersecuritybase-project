@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.db import connection
 from .models import Note
-from .forms import noteForm
+from .forms import noteForm,SignUpForm
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, authenticate
 # Create your views here.
 
+@login_required
 @csrf_exempt
 def index(request):
 	username = request.user.username
@@ -26,6 +29,7 @@ def index(request):
 	
 	return render(request, 'notes/notesPage.html', {'notes':note, 'form': form})
 
+@login_required
 @csrf_exempt
 def edit(request, note_id):
 	note = Note.objects.get(pk=note_id)
@@ -45,6 +49,7 @@ def edit(request, note_id):
 	}
 	return render(request,'user/edit.html', context)
 
+@login_required
 @csrf_exempt
 def delete(request, note_id):
 	note = Note.objects.get(pk=note_id)
@@ -52,4 +57,15 @@ def delete(request, note_id):
 	return redirect('index')
 
 def signup (request):
-	return redirect('home')
+	if request.method == 'POST':
+		form = SignUpForm(request.POST)
+		if form.is_valid():
+			form.save()
+			username = form.cleaned_data.get('username')
+			raw_password = form.cleaned_data.get('password1')
+			user = authenticate(username=username, password = raw_password)
+			login(request, user)
+			return redirect('index')
+	else: 
+		form = SignUpForm()
+	return render(request, 'notes/signup.html', {'form': form})

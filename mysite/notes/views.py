@@ -10,12 +10,18 @@ from django.contrib.auth import login, authenticate
 @login_required
 @csrf_exempt
 def index(request):
-	username = request.user.username
+	username = "test' OR '1'='1" #
+	#FLAW 1: SQL injection
 	query = f"SELECT * FROM notes_note WHERE user_id = (SELECT id FROM auth_user WHERE username = '{username}')"
 	with connection.cursor() as cursor:
 		cursor.execute(query)
 		note = cursor.fetchall()
-
+	#Fix for FLAW1: use parameterized query to preven SQL injection:
+	#query = f"SELECT * FROM notes_note WHERE user_id = (SELECT id FROM auth_user WHERE username = %s)"
+	#with connection.cursor() as cursor:
+		#cursor.execute(query, [username])
+		#note = cursor.fetchall()
+		
 	if request.method == 'POST':
 		form = noteForm(request.POST)
 		if form.is_valid():

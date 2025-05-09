@@ -8,11 +8,9 @@
     <title>Notes</title>
 </head>
 <body>
-    <h1>My notes</h1>
+    <h1>{{user.username}}'s  notes</h1>
 
     <form action="{% url 'index' %}" method="POST">
-        <!--FLAW 1  Inadequate  CSRF protection-->
-        <!-- add csrf_token ({csrf_token})-->
         <label for="header">Header:</label><br>
         <input type="text" id="header" name="header"><br>
         
@@ -25,9 +23,6 @@
     <h2>Your Notes:</h2>
     <ul>
         {% for note in notes %}
-        <!--FLAW 5: Cross-site Scripting-->
-        <!--replace safe with escape-->
-        <!-- <li>{{ entry.1 | escape }} - {{ entry.2 | escape}}</li>-->
             <h3>{{ note.1 | safe }}</h3>
 			<p> {{ note.2 | safe}} </p>
             <a href="{%url 'edit' note.0%}">Edit</a> |

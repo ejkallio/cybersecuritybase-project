@@ -2,16 +2,19 @@ from django.shortcuts import render, redirect, HttpResponse
 from django.db import connection
 from .models import Note
 from .forms import noteForm,SignUpForm
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 
-# FLAW 3: 
-# Fix: implement basic security logging
+# FLAW 3: Insufficient monitoring and logging 
+# Fix for FLAW 3: implement basic security logging
 #import logging
 #
 #logger = logging.getLogger('django.security')
 
+# FLAW 5: CSRF
+# Fix for FLAW 5: Replace csrf_exempt with csrf_protect
+# @csrf_protect
 @login_required
 @csrf_exempt
 def index(request):
@@ -41,12 +44,14 @@ def index(request):
 	
 	return render(request, 'notes/notesPage.html', {'notes':note, 'form': form})
 
+# FLAW 5:
+#csrf_protect
 @login_required
 @csrf_exempt
 def edit(request, note_id):
 	note = Note.objects.get(pk=note_id)
 	# FLAW 2: Broken access control
-	# FIX: Check if the note belongs to the current user before allowing editing
+	# FIX for FLAW 2: Check if the note belongs to the current user before allowing editing
 	#if request.user != note.user:
 		#return HttpResponse("Error: You don't have permission to edit this note.")
 	if request.method == 'POST':
@@ -67,6 +72,8 @@ def edit(request, note_id):
 	}
 	return render(request,'user/edit.html', context)
 
+# FLAW 5:
+# csrf_protect
 @login_required
 @csrf_exempt
 def delete(request, note_id):

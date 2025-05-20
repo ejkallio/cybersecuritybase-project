@@ -11,6 +11,8 @@
     <h1>{{user.username}}'s  notes</h1>
 
     <form action="{% url 'index' %}" method="POST">
+		<!-- FLAW 5: add -->
+		<!-- {% csrf_token %}-->
         <label for="header">Header:</label><br>
         <input type="text" id="header" name="header"><br>
         
@@ -24,7 +26,7 @@
     <ul>
         {% for note in notes %}
 			<!-- FLAW 4: cross-site scripting -->
-			<!-- Fix: replaxe with: -->
+			<!-- Fix for FLAW 4: replaxe safe with escape -->
 			<!-- <h3>{{ note.1 | escape }}</h3> -->	
 			<!-- <p>{{ note.2 | escape }}</p>-->
             <h3>{{ note.1 | safe }}</h3>

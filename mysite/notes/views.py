@@ -45,7 +45,7 @@ def index(request):
 	return render(request, 'notes/notesPage.html', {'notes':note, 'form': form})
 
 # FLAW 5:
-#csrf_protect
+#@csrf_protect
 @login_required
 @csrf_exempt
 def edit(request, note_id):
@@ -73,7 +73,7 @@ def edit(request, note_id):
 	return render(request,'user/edit.html', context)
 
 # FLAW 5:
-# csrf_protect
+# @csrf_protect
 @login_required
 @csrf_exempt
 def delete(request, note_id):

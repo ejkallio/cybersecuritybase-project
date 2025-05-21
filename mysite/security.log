@@ -6,3 +6,4 @@ INFO 2025-05-09 17:00:27,337 views User test deleted note with the ID: 18
 WARNING 2025-05-20 11:19:54,724 log Forbidden (CSRF token missing.): /notes/signup/
 WARNING 2025-05-20 11:24:26,222 log Forbidden (CSRF token missing.): /login/
 WARNING 2025-05-20 11:25:33,850 log Forbidden (CSRF token missing.): /accounts/logout/
+WARNING 2025-05-21 11:13:57,280 log Forbidden (CSRF token missing.): /notes/edit/12
